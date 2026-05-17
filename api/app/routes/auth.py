@@ -6,7 +6,6 @@ from app.database import get_db
 from app.models import User
 from app.schemas import UserCreate, UserLogin, Token, TokenRefresh, UserResponse
 from app.utils.security import (
-    hash_password,
     verify_password,
     create_access_token,
     create_refresh_token,
@@ -20,40 +19,15 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register(user_data: UserCreate, db: Session = Depends(get_db)):
+def register(user_data: UserCreate):
     """
-    Register a new user account.
-
-    Note: In production, this would be admin-only.
-    For now, allows registration for single-user setup.
+    Registration is disabled for this single-account app.
     """
-    if cf_access_is_enabled():
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Password registration is disabled for this app",
-        )
-
-    # Check if username already exists
-    existing_user = db.query(User).filter(User.username == user_data.username).first()
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered",
-        )
-
-    # Create new user
-    hashed_password = hash_password(user_data.password)
-    new_user = User(
-        username=user_data.username,
-        first_name=user_data.first_name,
-        password_hash=hashed_password
+    _ = user_data
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="Registration is disabled for this app",
     )
-
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return new_user
 
 
 @router.post("/login", response_model=Token)
