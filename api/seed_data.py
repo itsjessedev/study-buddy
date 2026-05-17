@@ -132,48 +132,65 @@ def seed_database():
         # Create admin users first (always needed)
         create_admin_users(db)
 
-        # Check if already seeded
-        existing_skills = db.query(Skill).count()
-        if existing_skills > 0:
-            print(f"Database already has {existing_skills} skills. Skipping seed.")
-            return
-
         print("Loading skills from skills.json...")
         data = load_skills_json()
 
-        print(f"Found {len(data['skills'])} skills to seed")
-        print("Creating skills...")
+        print(f"Found {len(data['skills'])} current skills to sync")
+        print("Creating/updating skills...")
 
-        # Create skills first (without prerequisites)
+        # Create or update current skills first. Older broad-curriculum skills may
+        # still exist in production for historical rows, but app routes only expose
+        # slugs from content/skills.json.
         skill_objects = {}
+        created_skills = 0
+        updated_skills = 0
         for skill_data in data['skills']:
             explanation = load_explainer(skill_data['slug'], skill_data['subject'])
 
-            skill = Skill(
-                slug=skill_data['slug'],
-                name=skill_data['name'],
-                subject=skill_data['subject'],
-                description=skill_data['description'],
-                khan_url=skill_data['khan_url'],
-                youtube_id=skill_data.get('youtube_id'),
-                explanation=explanation,
-                difficulty_base=skill_data['difficulty_base'],
-            )
-            db.add(skill)
+            skill = db.query(Skill).filter(Skill.slug == skill_data['slug']).first()
+            if skill:
+                updated_skills += 1
+                skill.name = skill_data['name']
+                skill.subject = skill_data['subject']
+                skill.description = skill_data['description']
+                skill.khan_url = skill_data['khan_url']
+                skill.youtube_id = skill_data.get('youtube_id')
+                skill.explanation = explanation
+                skill.difficulty_base = skill_data['difficulty_base']
+            else:
+                created_skills += 1
+                skill = Skill(
+                    slug=skill_data['slug'],
+                    name=skill_data['name'],
+                    subject=skill_data['subject'],
+                    description=skill_data['description'],
+                    khan_url=skill_data['khan_url'],
+                    youtube_id=skill_data.get('youtube_id'),
+                    explanation=explanation,
+                    difficulty_base=skill_data['difficulty_base'],
+                )
+                db.add(skill)
+
             skill_objects[skill_data['slug']] = {
                 'object': skill,
                 'prerequisites': skill_data.get('prerequisites', [])
             }
 
         db.commit()
-        print(f"✅ Created {len(skill_objects)} skills!")
+        print(f"✅ Synced {len(skill_objects)} skills ({created_skills} created, {updated_skills} updated)!")
 
         # Refresh all skills to get their IDs
         for slug, data in skill_objects.items():
             db.refresh(data['object'])
 
         # Create prerequisites
-        print("Creating skill prerequisites...")
+        print("Syncing skill prerequisites...")
+        current_skill_ids = [data['object'].id for data in skill_objects.values()]
+        if current_skill_ids:
+            db.query(SkillPrerequisite).filter(
+                SkillPrerequisite.skill_id.in_(current_skill_ids)
+            ).delete(synchronize_session=False)
+
         prereq_count = 0
         for slug, data in skill_objects.items():
             skill = data['object']
@@ -189,7 +206,7 @@ def seed_database():
                     print(f"⚠️  Warning: Prerequisite '{prereq_slug}' not found for skill '{slug}'")
 
         db.commit()
-        print(f"✅ Created {prereq_count} prerequisites!")
+        print(f"✅ Synced {prereq_count} prerequisites!")
 
         # Create question templates for skills with generators
         print("Creating question templates...")
@@ -197,42 +214,52 @@ def seed_database():
 
         # Map skill slugs to generator types and difficulty ranges
         skill_generator_map = {
-            'solving-linear-equations': ('linear_equation', [1, 2, 3]),
-            'fraction-addition': ('fraction_addition', [1, 2, 3]),
-            'solving-quadratic-equations': ('quadratic_equation', [1, 2, 3, 4, 5]),
-            'systems-of-equations': ('system_of_equations', [1, 2, 3]),
-            'polynomial-operations': ('polynomial_operation', [1, 2, 3]),
-            'order-of-operations': ('order_of_operations', [1, 2, 3]),
-            'distributive-property': ('distributive_property', [1, 2, 3]),
-            'combining-like-terms': ('combining_like_terms', [1, 2, 3]),
-            'evaluating-expressions': ('evaluating_expressions', [1, 2, 3]),
-            'solving-inequalities': ('inequality', [1, 2, 3]),
+            'fractions': ('course_fractions', [1, 2, 3]),
+            'solving-equations': ('course_solving_equations', [1, 2, 3]),
             'exponent-rules': ('exponent_rules', [1, 2, 3]),
-            'slope-intercept-form': ('slope_intercept', [1, 2, 3]),
-            'integers-operations': ('integers_operations', [1, 2, 3]),
-            'absolute-value': ('absolute_value', [1, 2, 3]),
-            'fractions-multiplication': ('fractions_multiplication', [1, 2, 3]),
-            'fractions-division': ('fractions_division', [1, 2, 3]),
-            'percentages': ('percentages', [1, 2, 3]),
+            'factoring': ('course_factoring', [1, 2, 3]),
+            'function-notation': ('function_notation', [1, 2, 3]),
+            'graphs-and-slope': ('course_graphs_and_slope', [1, 2, 3]),
+            'radicals': ('radical_expressions', [1, 2, 3]),
+            'logs-exponentials': ('logs_exponentials', [1, 2, 3]),
+            'basic-trig': ('sine_cosine_tangent', [1, 2, 3]),
         }
 
-        # Create templates for each skill
+        # Create or update templates for each current skill. Update every matching
+        # skill/difficulty row so stale production templates cannot be selected.
+        templates_created = 0
+        templates_updated = 0
         for skill_slug, (generator_type, difficulties) in skill_generator_map.items():
             if skill_slug in skill_objects:
                 skill = skill_objects[skill_slug]['object']
                 for difficulty in difficulties:
-                    templates.append(QuestionTemplate(
-                        skill_id=skill.id,
-                        template_type=generator_type,
-                        template_data={"difficulty": difficulty},
-                        difficulty=difficulty,
-                    ))
+                    existing_templates = (
+                        db.query(QuestionTemplate)
+                        .filter(
+                            QuestionTemplate.skill_id == skill.id,
+                            QuestionTemplate.difficulty == difficulty,
+                        )
+                        .all()
+                    )
+                    if existing_templates:
+                        for template in existing_templates:
+                            template.template_type = generator_type
+                            template.template_data = {"difficulty": difficulty}
+                            templates_updated += 1
+                    else:
+                        templates.append(QuestionTemplate(
+                            skill_id=skill.id,
+                            template_type=generator_type,
+                            template_data={"difficulty": difficulty},
+                            difficulty=difficulty,
+                        ))
+                        templates_created += 1
 
         for template in templates:
             db.add(template)
 
         db.commit()
-        print(f"✅ Created {len(templates)} question templates!")
+        print(f"✅ Synced question templates ({templates_created} created, {templates_updated} updated)!")
 
         # Seed badges
         print("Creating badges...")
@@ -247,7 +274,7 @@ def seed_database():
 
         # Show skills by subject
         print("\n📚 Skills by subject:")
-        for subject_name in ["Pre-Algebra", "Algebra Basics", "Algebra I", "Algebra II", "Trigonometry", "Precalculus"]:
+        for subject_name in ["College Math Foundations", "Algebra", "Functions", "Precalculus", "Trigonometry"]:
             count = db.query(Skill).filter(Skill.subject == subject_name).count()
             if count > 0:
                 print(f"   - {subject_name}: {count} skills")

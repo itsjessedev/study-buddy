@@ -15,6 +15,7 @@ from app.schemas import QuestionResponse, AnswerSubmit
 from app.auth import get_current_user
 from app.generators import get_generator
 from app.utils.answer_validation import answers_are_equivalent
+from app.course_catalog import get_current_course_slugs
 
 router = APIRouter(prefix="/evaluation", tags=["Evaluation"])
 
@@ -94,7 +95,12 @@ def start_evaluation(
     Tests all skills starting at level 1, adapting based on performance.
     """
     # Get all skills with templates, grouped by subject
-    skills = db.query(Skill).order_by(Skill.subject, Skill.id).all()
+    skills = (
+        db.query(Skill)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
+        .order_by(Skill.subject, Skill.id)
+        .all()
+    )
 
     # Filter to skills with templates and organize by subject
     skills_by_subject: Dict[str, list] = {}
@@ -125,7 +131,13 @@ def start_evaluation(
         )
 
     # Randomize skill order within each subject, keep subjects in curriculum order
-    subject_order = ["Pre-Algebra", "Algebra Basics", "Algebra I", "Algebra II", "Trigonometry", "Precalculus"]
+    subject_order = [
+        "College Math Foundations",
+        "Algebra",
+        "Functions",
+        "Precalculus",
+        "Trigonometry",
+    ]
     ordered_subjects = [s for s in subject_order if s in skills_by_subject]
     # Add any subjects not in our predefined order
     for s in skills_by_subject:

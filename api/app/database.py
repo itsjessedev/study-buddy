@@ -17,6 +17,12 @@ class Settings(BaseSettings):
     refresh_token_days: int = 30
     api_prefix: str = "/study"
     cors_origins: str = "http://localhost:5173,https://study.junipr.io"
+    cf_access_enabled: bool = False
+    cf_access_team_domain: str | None = None
+    cf_access_audience: str | None = None
+    cf_access_allowed_emails: str = "jeldridge2583@gmail.com,jesse@junipr.io"
+    cf_access_account_username: str = "jesse"
+    cf_access_account_first_name: str = "Jesse"
 
     class Config:
         env_file = ".env"

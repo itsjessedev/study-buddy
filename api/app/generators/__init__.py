@@ -50,6 +50,12 @@ from app.generators.inverse_trig_functions import generate_inverse_trig_function
 from app.generators.law_of_sines import generate_law_of_sines
 from app.generators.law_of_cosines import generate_law_of_cosines
 from app.generators.trigonometric_equations import generate_trigonometric_equations
+from app.generators.course_fractions import generate_course_fractions
+from app.generators.course_solving_equations import generate_course_solving_equations
+from app.generators.course_factoring import generate_course_factoring
+from app.generators.course_graphs_and_slope import generate_course_graphs_and_slope
+from app.generators.function_notation import generate_function_notation
+from app.generators.logs_exponentials import generate_logs_exponentials
 
 # Registry of generator functions by template type
 GENERATORS: Dict[str, Callable[[int], Dict[str, Any]]] = {
@@ -102,6 +108,12 @@ GENERATORS: Dict[str, Callable[[int], Dict[str, Any]]] = {
     "law_of_sines": generate_law_of_sines,
     "law_of_cosines": generate_law_of_cosines,
     "trigonometric_equations": generate_trigonometric_equations,
+    "course_fractions": generate_course_fractions,
+    "course_solving_equations": generate_course_solving_equations,
+    "course_factoring": generate_course_factoring,
+    "course_graphs_and_slope": generate_course_graphs_and_slope,
+    "function_notation": generate_function_notation,
+    "logs_exponentials": generate_logs_exponentials,
 }
 
 

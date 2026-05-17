@@ -1,482 +1,108 @@
 {
   "skills": [
     {
-      "slug": "integers-operations",
-      "name": "Operations with Integers",
-      "subject": "Pre-Algebra",
-      "description": "Add, subtract, multiply, and divide positive and negative integers",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-negative-numbers",
-      "youtube_id": "BqfDKV0gPRE",
+      "slug": "fractions",
+      "name": "Fractions",
+      "subject": "College Math Foundations",
+      "description": "Add, subtract, multiply, divide, and simplify fractions",
+      "khan_url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic",
+      "youtube_id": "5juto2ze8Lg",
       "prerequisites": [],
       "difficulty_base": 1
     },
     {
-      "slug": "absolute-value",
-      "name": "Absolute Value",
-      "subject": "Pre-Algebra",
-      "description": "Understand and compute absolute values of numbers",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-negative-numbers/pre-algebra-absolute-value",
-      "prerequisites": ["integers-operations"],
+      "slug": "solving-equations",
+      "name": "Solving Equations",
+      "subject": "Algebra",
+      "description": "Solve one-step, multi-step, and variable-on-both-sides equations",
+      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-linear-equations-and-inequalities",
+      "prerequisites": ["fractions"],
       "difficulty_base": 1
-    },
-    {
-      "slug": "fraction-addition",
-      "name": "Adding Fractions",
-      "subject": "Pre-Algebra",
-      "description": "Add and subtract fractions with different denominators",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-fractions/pre-algebra-add-sub-fractions",
-      "youtube_id": "zkJ1gOrYhEg",
-      "prerequisites": ["integers-operations"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "fractions-multiplication",
-      "name": "Multiplying Fractions",
-      "subject": "Pre-Algebra",
-      "description": "Multiply fractions and simplify the results",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-fractions/pre-algebra-multiply-fractions",
-      "youtube_id": "QDvKqUc7Mj4",
-      "prerequisites": ["fraction-addition"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "fractions-division",
-      "name": "Dividing Fractions",
-      "subject": "Pre-Algebra",
-      "description": "Divide fractions using the reciprocal method",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-fractions/pre-algebra-divide-fractions",
-      "youtube_id": "m-pRnFIeoNA",
-      "prerequisites": ["fractions-multiplication"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "decimals-operations",
-      "name": "Operations with Decimals",
-      "subject": "Pre-Algebra",
-      "description": "Add, subtract, multiply, and divide decimal numbers",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-decimals",
-      "prerequisites": ["integers-operations"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "percentages",
-      "name": "Percentages",
-      "subject": "Pre-Algebra",
-      "description": "Convert between percentages, decimals, and fractions; solve percentage problems",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-ratios-rates/pre-algebra-intro-percents",
-      "prerequisites": ["decimals-operations", "fractions-division"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "ratios-proportions",
-      "name": "Ratios and Proportions",
-      "subject": "Pre-Algebra",
-      "description": "Understand ratios and solve proportion problems",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-ratios-rates",
-      "prerequisites": ["fractions-division"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "unit-conversions",
-      "name": "Unit Conversions",
-      "subject": "Pre-Algebra",
-      "description": "Convert between different units of measurement",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-measurement",
-      "prerequisites": ["ratios-proportions"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "simple-interest",
-      "name": "Simple Interest",
-      "subject": "Pre-Algebra",
-      "description": "Calculate simple interest on loans and investments",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-ratios-rates/pre-algebra-percent-word-problems",
-      "prerequisites": ["percentages"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "pythagorean-theorem",
-      "name": "Pythagorean Theorem",
-      "subject": "Pre-Algebra",
-      "description": "Use the Pythagorean theorem to find sides of right triangles",
-      "khan_url": "https://www.khanacademy.org/math/pre-algebra/pre-algebra-geometry/pre-algebra-pythagorean-theorem",
-      "prerequisites": ["integers-operations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "order-of-operations",
-      "name": "Order of Operations",
-      "subject": "Algebra Basics",
-      "description": "Apply PEMDAS/BODMAS to evaluate expressions",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-expressions-with-exponents/alg-basics-order-of-operations",
-      "youtube_id": "eoYThjIAhOc",
-      "prerequisites": ["integers-operations"],
-      "difficulty_base": 1
-    },
-    {
-      "slug": "distributive-property",
-      "name": "Distributive Property",
-      "subject": "Algebra Basics",
-      "description": "Apply the distributive property to simplify expressions",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-algebraic-expressions/alg-basics-distributive-property",
-      "prerequisites": ["order-of-operations"],
-      "difficulty_base": 1
-    },
-    {
-      "slug": "evaluating-expressions",
-      "name": "Evaluating Algebraic Expressions",
-      "subject": "Algebra Basics",
-      "description": "Substitute values into algebraic expressions and evaluate",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-algebraic-expressions/alg-basics-evaluating-expressions",
-      "prerequisites": ["order-of-operations"],
-      "difficulty_base": 1
-    },
-    {
-      "slug": "combining-like-terms",
-      "name": "Combining Like Terms",
-      "subject": "Algebra Basics",
-      "description": "Simplify expressions by combining like terms",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-algebraic-expressions/alg-basics-combining-like-terms",
-      "prerequisites": ["distributive-property"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "solving-linear-equations",
-      "name": "Solving Linear Equations",
-      "subject": "Algebra Basics",
-      "description": "Solve equations of the form ax + b = c",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-equations-and-inequalities/alg-basics-one-step-equations",
-      "prerequisites": ["combining-like-terms"],
-      "difficulty_base": 2
-    },
-    {
-      "slug": "equations-with-variables-both-sides",
-      "name": "Equations with Variables on Both Sides",
-      "subject": "Algebra Basics",
-      "description": "Solve equations where the variable appears on both sides",
-      "khan_url": "https://www.khanacademy.org/math/algebra-basics/alg-basics-equations-and-inequalities/alg-basics-multi-step-equations",
-      "prerequisites": ["solving-linear-equations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "solving-inequalities",
-      "name": "Solving Linear Inequalities",
-      "subject": "Algebra I",
-      "description": "Solve and graph linear inequalities",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:solve-equations-inequalities/x2f8bb11595b61c86:linear-inequalities",
-      "prerequisites": ["solving-linear-equations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "graphing-linear-equations",
-      "name": "Graphing Linear Equations",
-      "subject": "Algebra I",
-      "description": "Graph linear equations on the coordinate plane",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:functions/x2f8bb11595b61c86:graphing-linear-equations",
-      "prerequisites": ["solving-linear-equations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "slope-intercept-form",
-      "name": "Slope-Intercept Form",
-      "subject": "Algebra I",
-      "description": "Understand and use slope-intercept form (y = mx + b)",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:forms-of-linear-equations/x2f8bb11595b61c86:slope-intercept-form",
-      "prerequisites": ["graphing-linear-equations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "point-slope-form",
-      "name": "Point-Slope Form",
-      "subject": "Algebra I",
-      "description": "Write and use point-slope form equations",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:forms-of-linear-equations/x2f8bb11595b61c86:point-slope-form",
-      "prerequisites": ["slope-intercept-form"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "systems-of-equations",
-      "name": "Systems of Equations",
-      "subject": "Algebra I",
-      "description": "Solve systems of linear equations using substitution and elimination",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:systems-of-equations",
-      "prerequisites": ["slope-intercept-form", "equations-with-variables-both-sides"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "solving-quadratic-equations",
-      "name": "Solving Quadratic Equations",
-      "subject": "Algebra I",
-      "description": "Solve quadratic equations by factoring, completing the square, and using the quadratic formula",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-solving-factoring",
-      "prerequisites": ["solving-linear-equations"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "factoring-quadratics",
-      "name": "Factoring Quadratic Expressions",
-      "subject": "Algebra I",
-      "description": "Factor quadratic expressions into binomial products",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-solving-factoring",
-      "prerequisites": ["distributive-property"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "quadratic-formula",
-      "name": "The Quadratic Formula",
-      "subject": "Algebra I",
-      "description": "Use the quadratic formula to solve any quadratic equation",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-solving-factoring/x2f8bb11595b61c86:quadratics-square-roots",
-      "prerequisites": ["solving-quadratic-equations"],
-      "difficulty_base": 4
     },
     {
       "slug": "exponent-rules",
-      "name": "Laws of Exponents",
-      "subject": "Algebra I",
-      "description": "Apply the laws of exponents to simplify expressions",
+      "name": "Exponent Rules",
+      "subject": "Algebra",
+      "description": "Use product, quotient, power, zero, and negative exponent rules",
       "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:exponents-radicals",
-      "prerequisites": ["order-of-operations"],
-      "difficulty_base": 3
+      "prerequisites": ["solving-equations"],
+      "difficulty_base": 2
     },
     {
-      "slug": "scientific-notation",
-      "name": "Scientific Notation",
-      "subject": "Algebra I",
-      "description": "Express numbers in scientific notation and perform operations",
-      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:exponents-radicals/x2f8bb11595b61c86:scientific-notation",
-      "prerequisites": ["exponent-rules", "decimals-operations"],
-      "difficulty_base": 3
-    },
-    {
-      "slug": "polynomial-operations",
-      "name": "Polynomial Operations",
-      "subject": "Algebra II",
-      "description": "Add, subtract, multiply, and divide polynomials",
-      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:poly-arithmetic",
-      "prerequisites": ["exponent-rules", "distributive-property"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "factoring-polynomials",
-      "name": "Factoring Polynomials",
-      "subject": "Algebra II",
-      "description": "Factor polynomials using various methods",
-      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:poly-factor",
-      "prerequisites": ["factoring-quadratics", "polynomial-operations"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "rational-expressions",
-      "name": "Rational Expressions",
-      "subject": "Algebra II",
-      "description": "Simplify, add, subtract, multiply, and divide rational expressions",
-      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:rational",
-      "prerequisites": ["factoring-polynomials", "fractions-division"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "radical-expressions",
-      "name": "Radical Expressions",
-      "subject": "Algebra II",
-      "description": "Simplify radical expressions and rationalize denominators",
-      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:rational-exponents",
+      "slug": "factoring",
+      "name": "Factoring",
+      "subject": "Algebra",
+      "description": "Factor quadratics, common factors, and special polynomial patterns",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-solving-factoring",
       "prerequisites": ["exponent-rules"],
-      "difficulty_base": 5
+      "difficulty_base": 2
     },
     {
-      "slug": "unit-circle-radians",
-      "name": "Unit Circle and Radians",
-      "subject": "Trigonometry",
-      "description": "Convert between degrees and radians, understand the unit circle",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/unit-circle-trig-func",
-      "prerequisites": ["pythagorean-theorem", "graphing-linear-equations"],
-      "difficulty_base": 4
+      "slug": "function-notation",
+      "name": "Function Notation",
+      "subject": "Functions",
+      "description": "Evaluate functions, interpret f(x), and work with inputs and outputs",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:functions",
+      "prerequisites": ["solving-equations"],
+      "difficulty_base": 2
     },
     {
-      "slug": "sine-cosine-tangent",
-      "name": "Sine, Cosine, and Tangent",
+      "slug": "graphs-and-slope",
+      "name": "Graphs and Slope",
+      "subject": "Functions",
+      "description": "Find slope, intercepts, and linear equations from graphs or points",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:linear-equations-graphs",
+      "prerequisites": ["function-notation"],
+      "difficulty_base": 2
+    },
+    {
+      "slug": "radicals",
+      "name": "Radicals",
+      "subject": "Algebra",
+      "description": "Simplify, combine, multiply, and rationalize radical expressions",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:rational-exponents-radicals",
+      "prerequisites": ["exponent-rules"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "logs-exponentials",
+      "name": "Logs and Exponentials",
+      "subject": "Precalculus",
+      "description": "Evaluate logarithms, rewrite exponential equations, and solve basic growth problems",
+      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:logs",
+      "prerequisites": ["exponent-rules", "function-notation"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "basic-trig",
+      "name": "Basic Trig",
       "subject": "Trigonometry",
-      "description": "Define and use the basic trigonometric ratios",
+      "description": "Use sine, cosine, tangent, right triangles, and common angle values",
       "khan_url": "https://www.khanacademy.org/math/trigonometry/trigonometry-right-triangles",
-      "prerequisites": ["unit-circle-radians", "ratios-proportions"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "pythagorean-identities",
-      "name": "Pythagorean Identities",
-      "subject": "Trigonometry",
-      "description": "Understand and apply trigonometric identities",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-equations-and-identities",
-      "prerequisites": ["sine-cosine-tangent", "pythagorean-theorem"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "graphing-trig-functions",
-      "name": "Graphing Trigonometric Functions",
-      "subject": "Trigonometry",
-      "description": "Graph sine, cosine, and tangent functions with transformations",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-function-graphs",
-      "prerequisites": ["sine-cosine-tangent", "graphing-linear-equations"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "inverse-trig-functions",
-      "name": "Inverse Trigonometric Functions",
-      "subject": "Trigonometry",
-      "description": "Evaluate and graph inverse trig functions (arcsin, arccos, arctan)",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-equations-and-identities/inverse-trig-functions",
-      "prerequisites": ["sine-cosine-tangent"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "law-of-sines",
-      "name": "Law of Sines",
-      "subject": "Trigonometry",
-      "description": "Solve triangles using the law of sines",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-with-general-triangles/law-of-sines",
-      "prerequisites": ["sine-cosine-tangent"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "law-of-cosines",
-      "name": "Law of Cosines",
-      "subject": "Trigonometry",
-      "description": "Solve triangles using the law of cosines",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-with-general-triangles/law-of-cosines",
-      "prerequisites": ["sine-cosine-tangent", "pythagorean-theorem"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "trigonometric-equations",
-      "name": "Trigonometric Equations",
-      "subject": "Trigonometry",
-      "description": "Solve equations involving trigonometric functions",
-      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-equations-and-identities/solving-trig-equations",
-      "prerequisites": ["pythagorean-identities", "inverse-trig-functions"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "function-composition",
-      "name": "Function Composition",
-      "subject": "Precalculus",
-      "description": "Compose functions and evaluate composite functions",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:composite",
-      "prerequisites": ["evaluating-expressions"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "inverse-functions",
-      "name": "Inverse Functions",
-      "subject": "Precalculus",
-      "description": "Find and verify inverse functions",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:composite/x9e81a4f98389efdf:inv-func-intro",
-      "prerequisites": ["function-composition", "solving-linear-equations"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "piecewise-functions",
-      "name": "Piecewise Functions",
-      "subject": "Precalculus",
-      "description": "Evaluate and graph piecewise-defined functions",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:functions/x9e81a4f98389efdf:piecewise",
-      "prerequisites": ["graphing-linear-equations", "evaluating-expressions"],
-      "difficulty_base": 4
-    },
-    {
-      "slug": "polynomial-long-division",
-      "name": "Polynomial Long Division",
-      "subject": "Precalculus",
-      "description": "Divide polynomials using long division",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:dividing",
-      "prerequisites": ["polynomial-operations"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "rational-functions",
-      "name": "Rational Functions",
-      "subject": "Precalculus",
-      "description": "Analyze and graph rational functions including asymptotes",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:rational",
-      "prerequisites": ["rational-expressions", "graphing-linear-equations"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "conic-sections",
-      "name": "Conic Sections",
-      "subject": "Precalculus",
-      "description": "Identify and graph circles, ellipses, parabolas, and hyperbolas",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:conics",
-      "prerequisites": ["solving-quadratic-equations", "graphing-linear-equations"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "parametric-equations",
-      "name": "Parametric Equations",
-      "subject": "Precalculus",
-      "description": "Work with equations defined using a parameter",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:parametric",
-      "prerequisites": ["graphing-linear-equations", "sine-cosine-tangent"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "polar-coordinates",
-      "name": "Polar Coordinates",
-      "subject": "Precalculus",
-      "description": "Convert between polar and rectangular coordinates, graph polar equations",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:polar",
-      "prerequisites": ["sine-cosine-tangent", "pythagorean-theorem"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "vectors",
-      "name": "Vectors",
-      "subject": "Precalculus",
-      "description": "Understand vector operations and applications",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:vectors",
-      "prerequisites": ["sine-cosine-tangent", "pythagorean-theorem"],
-      "difficulty_base": 5
-    },
-    {
-      "slug": "matrices",
-      "name": "Matrices",
-      "subject": "Precalculus",
-      "description": "Perform matrix operations and solve systems using matrices",
-      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:matrices",
-      "prerequisites": ["systems-of-equations"],
-      "difficulty_base": 5
+      "prerequisites": ["graphs-and-slope", "radicals"],
+      "difficulty_base": 3
     }
   ],
   "subjects": {
-    "Pre-Algebra": {
-      "description": "Foundation skills for algebra",
+    "College Math Foundations": {
+      "description": "Arithmetic and algebra foundations needed for college math",
       "order": 1
     },
-    "Algebra Basics": {
-      "description": "Introduction to algebraic thinking",
+    "Algebra": {
+      "description": "Core symbolic manipulation and equation skills",
       "order": 2
     },
-    "Algebra I": {
-      "description": "Core algebra concepts",
+    "Functions": {
+      "description": "Function notation, graphs, and linear behavior",
       "order": 3
     },
-    "Algebra II": {
-      "description": "Advanced algebra topics",
+    "Precalculus": {
+      "description": "Exponential and logarithmic preparation for calculus",
       "order": 4
     },
     "Trigonometry": {
-      "description": "Angles, triangles, and circular functions",
+      "description": "Right triangle and unit-circle trig basics",
       "order": 5
-    },
-    "Precalculus": {
-      "description": "Preparation for calculus",
-      "order": 6
     }
-  },
-  "meta": {
-    "version": "0.3.0",
-    "last_updated": "2024-12-19",
-    "total_skills": 49,
-    "status": "full_curriculum_coverage"
   }
 }

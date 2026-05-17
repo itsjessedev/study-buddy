@@ -1,6 +1,6 @@
 # Study Buddy API
 
-FastAPI backend for Study Buddy adaptive learning platform.
+FastAPI backend for the Study Buddy Calc I readiness refresher.
 
 ## Setup
 
@@ -24,6 +24,20 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your database credentials and JWT secret
 ```
+
+For production Google login through Cloudflare Zero Trust, set:
+
+```bash
+CF_ACCESS_ENABLED=true
+CF_ACCESS_TEAM_DOMAIN=https://your-team-name.cloudflareaccess.com
+CF_ACCESS_AUDIENCE=your-cloudflare-access-application-aud-tag
+CF_ACCESS_ALLOWED_EMAILS=jeldridge2583@gmail.com,jesse@junipr.io
+CF_ACCESS_ACCOUNT_USERNAME=jesse
+CF_ACCESS_ACCOUNT_FIRST_NAME=Jesse
+```
+
+When `CF_ACCESS_ENABLED=true`, password registration, password login, and token
+refresh endpoints are disabled.
 
 ### 4. Set Up Database
 
@@ -65,7 +79,7 @@ Once running, visit:
 ## Testing
 
 ```bash
-pytest
+PYTHONPATH=. ./venv/bin/python -m unittest tests.test_answer_validation tests.test_cf_access
 ```
 
 ## Deployment

@@ -46,6 +46,27 @@
   .card {
     @apply bg-surface border border-gray-800 rounded-lg p-4 sm:p-6 hover:border-primary transition-all hover:shadow-lg hover:shadow-primary/20;
   }
+
+  .lesson-stage {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+      #080808;
+  }
+
+  .lesson-math .katex-display {
+    margin: 0;
+  }
+
+  .lesson-math .katex {
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+
+  @media (min-width: 640px) {
+    .lesson-math .katex {
+      font-size: 1.65rem;
+    }
+  }
 }
 
 /* Mobile-specific utilities */

@@ -44,6 +44,8 @@ dist/
 build/
 *.min.js
 *.min.css
+output/
+.playwright-cli/
 
 # Session notes
 .session-notes.md

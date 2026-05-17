@@ -171,7 +171,7 @@ export const useEvaluationStore = create<EvaluationState>((set, get) => ({
     try {
       // Try to fetch next question from existing session
       await get().fetchNextQuestion();
-    } catch (error) {
+    } catch {
       // Session might have expired on backend, start fresh
       clearStoredSession();
       set({

@@ -19,36 +19,43 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     target: '[data-tutorial="mode-switcher"]',
-    title: 'Two Learning Modes',
-    content: 'Switch between Evaluation Mode (test your knowledge) and Practice Mode (targeted learning).',
+    title: 'Three Ways to Study',
+    content: 'Use Learn for guided lessons, Quiz Only for extra reps, and Check for a quick readiness scan.',
+    position: 'bottom',
+    align: 'start',
+  },
+  {
+    target: '[data-tutorial="learn-mode"]',
+    title: 'Learn Mode',
+    content: 'Walk through each topic like a coded lesson, answer checkpoints, then start a lesson quiz.',
     position: 'bottom',
     align: 'start',
   },
   {
     target: '[data-tutorial="evaluation-mode"]',
-    title: 'Evaluation Mode',
-    content: 'Take a comprehensive assessment across all topics. See your strengths and areas to improve.',
+    title: 'Readiness Check',
+    content: 'Take a short assessment across the refresher topics to see what is ready and what needs review.',
     position: 'bottom',
     align: 'start',
   },
   {
     target: '[data-tutorial="practice-mode"]',
-    title: 'Practice Mode',
-    content: 'Practice with adaptive questions that adjust to your level. Choose specific skills or let the algorithm guide you.',
+    title: 'Quiz Only',
+    content: 'Practice a specific course with generated questions when you want extra repetition.',
     position: 'bottom',
     align: 'start',
   },
   {
     target: '[data-tutorial="progress-bar"]',
     title: 'Track Your Progress',
-    content: 'Watch your progress in real-time. In Evaluation Mode, you\'ll see both overall and section progress.',
+    content: 'Watch your progress in real time. In Check mode, you\'ll see both overall and section progress.',
     position: 'bottom',
     align: 'center',
   },
   {
     target: '[data-tutorial="question-card"]',
     title: 'Answer Questions',
-    content: 'Type your answer and press Enter or click Submit. For fractions, use format like 3/4 or 1/2.',
+    content: 'Type the equivalent answer naturally. Fractions, decimals, radicals, powers, and reordered lists are accepted when they mean the same thing.',
     position: 'top',
     align: 'center',
   },
@@ -103,19 +110,19 @@ export default function Tutorial({ onComplete, onSkip }: TutorialProps) {
     };
   }, [updateTargetRect]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentStep < TUTORIAL_STEPS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       onComplete();
     }
-  };
+  }, [currentStep, onComplete]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
-  };
+  }, [currentStep]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -125,7 +132,7 @@ export default function Tutorial({ onComplete, onSkip }: TutorialProps) {
     } else if (e.key === 'ArrowLeft') {
       handlePrev();
     }
-  }, [currentStep, onSkip]);
+  }, [handleNext, handlePrev, onSkip]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);

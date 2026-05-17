@@ -93,7 +93,7 @@ export default function QuestionCard({ question, onSubmit, isLoading }: Question
             data-form-type="other"
           />
           <p className="text-sm text-gray-500 mt-2">
-            For fractions, use format: 3/4 or 1/2
+            Equivalent forms are accepted unless the question asks for a specific format.
           </p>
         </div>
 

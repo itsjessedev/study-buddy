@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { adminAPI } from '../api/admin';
@@ -22,30 +22,7 @@ export default function Admin() {
   const [skillPerformance, setSkillPerformance] = useState<SkillPerformance[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
 
-  useEffect(() => {
-    // App.tsx handles auth redirect, so if we're here, user exists
-    if (user) {
-      checkAdminAccess();
-    }
-  }, [user]);
-
-  const checkAdminAccess = async () => {
-    try {
-      const status = await adminAPI.checkStatus();
-      setAdminStatus(status);
-      if (!status.is_admin) {
-        setError('You do not have admin access');
-        setIsLoading(false);
-        return;
-      }
-      await loadData();
-    } catch {
-      setError('Failed to verify admin status');
-      setIsLoading(false);
-    }
-  };
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [statsData, usersData, evalsData, skillsData] = await Promise.all([
@@ -63,7 +40,30 @@ export default function Admin() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  const checkAdminAccess = useCallback(async () => {
+    try {
+      const status = await adminAPI.checkStatus();
+      setAdminStatus(status);
+      if (!status.is_admin) {
+        setError('You do not have admin access');
+        setIsLoading(false);
+        return;
+      }
+      await loadData();
+    } catch {
+      setError('Failed to verify admin status');
+      setIsLoading(false);
+    }
+  }, [loadData]);
+
+  useEffect(() => {
+    // App.tsx handles auth redirect, so if we're here, user exists
+    if (user) {
+      checkAdminAccess();
+    }
+  }, [user, checkAdminAccess]);
 
   const handleViewUser = async (userId: number) => {
     try {

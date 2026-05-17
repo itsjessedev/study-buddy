@@ -10,15 +10,20 @@ import ReportCard from '../components/ReportCard';
 import Tutorial from '../components/Tutorial';
 import EvaluationProgress from '../components/EvaluationProgress';
 import StreakIndicator from '../components/StreakIndicator';
+import CourseLearningPanel from '../components/CourseLearningPanel';
 
-type Mode = 'practice' | 'evaluation';
+type Mode = 'learn' | 'practice' | 'evaluation';
 
 const TUTORIAL_STORAGE_KEY_PREFIX = 'study-buddy-tutorial-completed-';
 
 export default function Quiz() {
   const { user, logout } = useAuthStore();
   const [searchParams] = useSearchParams();
-  const initialMode = searchParams.get('mode') === 'practice' ? 'practice' : 'evaluation';
+  const initialMode: Mode = searchParams.get('mode') === 'practice'
+    ? 'practice'
+    : searchParams.get('mode') === 'evaluation'
+      ? 'evaluation'
+      : 'learn';
   const [mode, setMode] = useState<Mode>(initialMode);
   const [showSectionToast, setShowSectionToast] = useState(false);
   const [completedSectionName, setCompletedSectionName] = useState<string | null>(null);
@@ -36,28 +41,31 @@ export default function Quiz() {
 
   const navigate = useNavigate();
 
-  // Get user-specific tutorial storage key
-  const getTutorialStorageKey = () => `${TUTORIAL_STORAGE_KEY_PREFIX}${user?.id}`;
+  const tutorialStorageKey = user ? `${TUTORIAL_STORAGE_KEY_PREFIX}${user.id}` : null;
 
   // Check if tutorial should be shown (first login for this user)
   useEffect(() => {
-    if (user) {
-      const tutorialCompleted = localStorage.getItem(getTutorialStorageKey());
+    if (tutorialStorageKey) {
+      const tutorialCompleted = localStorage.getItem(tutorialStorageKey);
       if (!tutorialCompleted) {
         // Small delay to let the UI render first
         const timer = setTimeout(() => setShowTutorial(true), 500);
         return () => clearTimeout(timer);
       }
     }
-  }, [user]);
+  }, [tutorialStorageKey]);
 
   const handleTutorialComplete = () => {
-    localStorage.setItem(getTutorialStorageKey(), 'true');
+    if (tutorialStorageKey) {
+      localStorage.setItem(tutorialStorageKey, 'true');
+    }
     setShowTutorial(false);
   };
 
   const handleTutorialSkip = () => {
-    localStorage.setItem(getTutorialStorageKey(), 'true');
+    if (tutorialStorageKey) {
+      localStorage.setItem(tutorialStorageKey, 'true');
+    }
     setShowTutorial(false);
   };
 
@@ -97,6 +105,11 @@ export default function Quiz() {
       return;
     }
 
+    if (mode === 'learn') {
+      setHasCheckedSession(true);
+      return;
+    }
+
     if (mode === 'evaluation' && !hasCheckedSession) {
       evaluationStore.checkForPendingSession();
       setHasCheckedSession(true);
@@ -105,7 +118,7 @@ export default function Quiz() {
 
   // Start evaluation or practice after session check (only if no pending session)
   useEffect(() => {
-    if (!user || !hasCheckedSession) return;
+    if (!user || !hasCheckedSession || mode === 'learn') return;
 
     // If there's a pending session, wait for user choice
     if (evaluationStore.hasPendingSession) return;
@@ -119,7 +132,7 @@ export default function Quiz() {
     }
 
     // Fetch first question on mount in practice mode
-    if (mode === 'practice' && !quizStore.currentQuestion && !quizStore.feedback) {
+    if (mode === 'practice' && !quizStore.isLoading && !quizStore.currentQuestion && !quizStore.feedback) {
       quizStore.fetchNextQuestion();
     }
   }, [user, mode, hasCheckedSession, evaluationStore, quizStore, showTutorial]);
@@ -144,6 +157,12 @@ export default function Quiz() {
   };
 
   // Mode switching handlers
+  const handleStartLearn = () => {
+    setMode('learn');
+    evaluationStore.reset();
+    setHasCheckedSession(true);
+  };
+
   const handleStartEvaluation = async () => {
     setMode('evaluation');
     setHasCheckedSession(false); // Re-check for pending session
@@ -179,6 +198,12 @@ export default function Quiz() {
     quizStore.fetchNextQuestion(skillId);
   };
 
+  const handleLessonQuizStart = (skillId: number) => {
+    setMode('practice');
+    quizStore.setSelectedSkill(skillId);
+    quizStore.fetchNextQuestion(skillId);
+  };
+
   // Evaluation mode handlers
   const handleEvaluationSubmit = async (answer: string) => {
     await evaluationStore.submitAnswer(answer);
@@ -194,9 +219,21 @@ export default function Quiz() {
   }
 
   // Determine which store to use based on mode
-  const currentQuestion = mode === 'practice' ? quizStore.currentQuestion : evaluationStore.currentQuestion;
-  const isLoading = mode === 'practice' ? quizStore.isLoading : evaluationStore.isLoading;
-  const error = mode === 'practice' ? quizStore.error : evaluationStore.error;
+  const currentQuestion = mode === 'practice'
+    ? quizStore.currentQuestion
+    : mode === 'evaluation'
+      ? evaluationStore.currentQuestion
+      : null;
+  const isLoading = mode === 'practice'
+    ? quizStore.isLoading
+    : mode === 'evaluation'
+      ? evaluationStore.isLoading
+      : false;
+  const error = mode === 'practice'
+    ? quizStore.error
+    : mode === 'evaluation'
+      ? evaluationStore.error
+      : null;
 
   return (
     <div className="min-h-screen bg-background safe-area-inset">
@@ -245,38 +282,49 @@ export default function Quiz() {
 
           {/* Mode Switcher - Stack on mobile */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3" data-tutorial="mode-switcher">
-            <div className="flex bg-background rounded-lg p-1 border border-gray-700 w-full sm:w-auto">
+            <div className="grid grid-cols-3 bg-background rounded-lg p-1 border border-gray-700 w-full sm:w-auto">
               <button
-                onClick={handleStartEvaluation}
-                disabled={mode === 'evaluation' || evaluationStore.isActive}
-                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors no-select ${
-                  mode === 'evaluation'
-                    ? 'bg-secondary text-white'
+                onClick={handleStartLearn}
+                disabled={mode === 'learn'}
+                className={`px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors no-select ${
+                  mode === 'learn'
+                    ? 'bg-accent text-background'
                     : 'text-gray-400 hover:text-gray-200'
                 }`}
-                data-tutorial="evaluation-mode"
+                data-tutorial="learn-mode"
               >
-                Evaluation
+                Learn
               </button>
               <button
-                onClick={() => mode === 'evaluation' && handleExitEvaluation()}
+                onClick={() => mode !== 'practice' && handleExitEvaluation()}
                 disabled={mode === 'practice'}
-                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors no-select ${
+                className={`px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors no-select ${
                   mode === 'practice'
                     ? 'bg-primary text-white'
                     : 'text-gray-400 hover:text-gray-200'
                 }`}
                 data-tutorial="practice-mode"
               >
-                Practice
+                Quiz Only
+              </button>
+              <button
+                onClick={handleStartEvaluation}
+                disabled={mode === 'evaluation' || evaluationStore.isActive}
+                className={`px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-medium transition-colors no-select ${
+                  mode === 'evaluation'
+                    ? 'bg-secondary text-white'
+                    : 'text-gray-400 hover:text-gray-200'
+                }`}
+                data-tutorial="evaluation-mode"
+              >
+                Check
               </button>
             </div>
 
             <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-              {mode === 'practice'
-                ? 'Adaptive practice with personalized questions'
-                : 'Quick assessment to find your knowledge level'
-              }
+              {mode === 'learn' && 'Interactive lessons with practice checkpoints'}
+              {mode === 'practice' && 'Extra quiz practice for a specific course'}
+              {mode === 'evaluation' && 'Quick readiness check across the refresher'}
             </p>
           </div>
         </header>
@@ -296,11 +344,15 @@ export default function Quiz() {
             </div>
           )}
 
-          {mode === 'evaluation' && evaluationStore.isActive && evaluationStore.progress ? (
+          {mode === 'learn' ? (
+            <p className="text-gray-400 text-sm text-center">
+              Choose a topic, watch each math move unfold, then try the lesson quiz.
+            </p>
+          ) : mode === 'evaluation' && evaluationStore.isActive && evaluationStore.progress ? (
             <EvaluationProgress
               currentSection={evaluationStore.progress.section_name}
               sectionIndex={evaluationStore.progress.section_index || 0}
-              totalSections={evaluationStore.progress.total_sections || 6}
+              totalSections={evaluationStore.progress.total_sections || 5}
               questionsInSection={evaluationStore.progress.section_total}
               questionsCompletedInSection={evaluationStore.progress.section_completed}
               overallProgress={evaluationStore.progress.overall_percent}
@@ -314,7 +366,7 @@ export default function Quiz() {
               />
             </div>
           ) : (
-            <p className="text-gray-500 text-sm">Starting evaluation...</p>
+            <p className="text-gray-500 text-sm">Starting readiness check...</p>
           )}
         </div>
 
@@ -328,11 +380,13 @@ export default function Quiz() {
           )}
 
           <div data-tutorial="question-card">
-            {isLoading && !currentQuestion ? (
+            {mode === 'learn' ? (
+              <CourseLearningPanel onStartQuiz={handleLessonQuizStart} />
+            ) : isLoading && !currentQuestion ? (
               <div className="card text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                 <p className="text-gray-400">
-                  {mode === 'evaluation' ? 'Starting evaluation...' : 'Loading next question...'}
+                  {mode === 'evaluation' ? 'Starting readiness check...' : 'Loading next question...'}
                 </p>
               </div>
             ) : currentQuestion ? (
@@ -348,20 +402,22 @@ export default function Quiz() {
                   onClick={() => mode === 'practice' ? quizStore.fetchNextQuestion() : handleStartEvaluation()}
                   className="btn-primary"
                 >
-                  {mode === 'practice' ? 'Start Practicing' : 'Start Evaluation'}
+                  {mode === 'practice' ? 'Start Quiz Practice' : 'Start Readiness Check'}
                 </button>
               </div>
             )}
           </div>
 
           {/* Help Text */}
-          <div className="mt-8 text-center text-sm text-gray-500">
-            {mode === 'practice' ? (
-              <p>Tip: The more you practice, the better the adaptive algorithm gets at finding your weak spots!</p>
-            ) : (
-              <p>Evaluation Mode: Testing each skill at multiple difficulty levels to assess your proficiency</p>
-            )}
-          </div>
+          {mode !== 'learn' && (
+            <div className="mt-8 text-center text-sm text-gray-500">
+              {mode === 'practice' ? (
+                <p>Quiz Only: use this when you want extra reps without the guided lesson.</p>
+              ) : (
+                <p>Readiness Check: testing each refresher topic at multiple difficulty levels.</p>
+              )}
+            </div>
+          )}
         </main>
 
         {/* Feedback Modal - Only in Practice Mode */}

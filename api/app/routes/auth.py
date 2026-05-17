@@ -14,6 +14,7 @@ from app.utils.security import (
     verify_token_type,
 )
 from app.auth import get_current_user
+from app.cf_access import cf_access_is_enabled
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -26,6 +27,12 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     Note: In production, this would be admin-only.
     For now, allows registration for single-user setup.
     """
+    if cf_access_is_enabled():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Password registration is disabled for this app",
+        )
+
     # Check if username already exists
     existing_user = db.query(User).filter(User.username == user_data.username).first()
     if existing_user:
@@ -52,6 +59,12 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
     """Authenticate user and return JWT tokens."""
+    if cf_access_is_enabled():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Password login is disabled for this app",
+        )
+
     # Find user
     user = db.query(User).filter(User.username == credentials.username).first()
     if not user or not verify_password(credentials.password, user.password_hash):
@@ -75,6 +88,12 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 @router.post("/refresh", response_model=Token)
 def refresh(token_data: TokenRefresh, db: Session = Depends(get_db)):
     """Refresh access token using refresh token."""
+    if cf_access_is_enabled():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Password token refresh is disabled for this app",
+        )
+
     payload = decode_token(token_data.refresh_token)
 
     if payload is None:

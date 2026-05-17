@@ -97,6 +97,19 @@ class AnswerSubmit(BaseModel):
     time_taken_seconds: Optional[int] = None
 
 
+class AnswerValidationRequest(BaseModel):
+    """Schema for checking an answer against an expected value."""
+
+    answer: str
+    expected_answer: str
+
+
+class AnswerValidationResponse(BaseModel):
+    """Schema for answer equivalence validation."""
+
+    is_correct: bool
+
+
 class AnswerFeedback(BaseModel):
     """Schema for answer feedback."""
 

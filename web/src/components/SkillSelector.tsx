@@ -95,9 +95,9 @@ export default function SkillSelector({ onSelectSkill, selectedSkillId }: SkillS
           className="w-full px-4 py-2 bg-surface border border-gray-700 rounded-lg flex items-center justify-between hover:border-primary transition-all"
         >
           <div className="text-left">
-            <div className="text-xs text-gray-500">Practice Mode</div>
+            <div className="text-xs text-gray-500">Quiz Only</div>
             <div className="font-medium text-sm">
-              {selectedSkill ? selectedSkill.name : 'Adaptive (Recommended)'}
+              {selectedSkill ? selectedSkill.name : 'Mixed Practice'}
             </div>
             {selectedSkill && (
               <div className="text-xs text-gray-400">{selectedSkill.subject}</div>
@@ -128,9 +128,9 @@ export default function SkillSelector({ onSelectSkill, selectedSkillId }: SkillS
                 !selectedSkillId ? 'bg-primary bg-opacity-20' : ''
               }`}
             >
-              <div className="font-medium">Adaptive Mode</div>
+              <div className="font-medium">Mixed Practice</div>
               <div className="text-xs text-gray-400 mt-1">
-                Let the algorithm choose the best skill for you
+                Let Study Buddy choose the next course based on your progress
               </div>
             </button>
 
@@ -170,8 +170,8 @@ export default function SkillSelector({ onSelectSkill, selectedSkillId }: SkillS
 
       <div className="mt-2 text-xs text-gray-500 text-center">
         {selectedSkill
-          ? "You're practicing a specific skill. Switch to Adaptive Mode to let the algorithm choose for you."
-          : "The algorithm will choose the best skill based on your progress."
+          ? "You're practicing a specific course. Switch to Mixed Practice when you want a broader review."
+          : "Study Buddy will choose the next course based on your progress."
         }
       </div>
     </div>

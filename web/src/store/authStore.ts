@@ -62,14 +62,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   checkAuth: async () => {
-    if (!authAPI.isAuthenticated()) {
-      set({ user: null, isLoading: false });
-      return;
-    }
     try {
       const user = await authAPI.getCurrentUser();
       set({ user, isLoading: false });
-    } catch (error) {
+    } catch {
+      if (!authAPI.isAuthenticated()) {
+        set({ user: null, isLoading: false });
+        return;
+      }
       // Token might be expired, try to refresh
       try {
         await authAPI.refreshToken();

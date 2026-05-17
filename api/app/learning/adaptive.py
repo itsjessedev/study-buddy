@@ -7,6 +7,7 @@ from sqlalchemy import func
 from app.models import Skill, UserMastery, QuestionTemplate, SkillPrerequisite
 from app.learning.mastery import get_recent_results
 from app.learning.spaced_repetition import is_due_for_review
+from app.course_catalog import get_current_course_slugs
 import random
 
 
@@ -75,6 +76,8 @@ def get_due_reviews(user_id: int, db: Session) -> List[int]:
     # Get skills with available templates
     skills_with_templates = (
         db.query(QuestionTemplate.skill_id)
+        .join(Skill, Skill.id == QuestionTemplate.skill_id)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
         .distinct()
         .all()
     )
@@ -113,6 +116,8 @@ def get_weak_prerequisites(user_id: int, db: Session, threshold: float = 50.0) -
     # Get skills with available templates
     skills_with_templates = (
         db.query(QuestionTemplate.skill_id)
+        .join(Skill, Skill.id == QuestionTemplate.skill_id)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
         .distinct()
         .all()
     )
@@ -150,6 +155,8 @@ def get_unpracticed_skills(user_id: int, db: Session) -> List[int]:
     # Get skills with available templates
     skills_with_templates = (
         db.query(QuestionTemplate.skill_id)
+        .join(Skill, Skill.id == QuestionTemplate.skill_id)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
         .distinct()
         .all()
     )
@@ -186,6 +193,8 @@ def weighted_random_skill(user_id: int, db: Session) -> Optional[int]:
     # Get skills with available templates
     skills_with_templates = (
         db.query(QuestionTemplate.skill_id)
+        .join(Skill, Skill.id == QuestionTemplate.skill_id)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
         .distinct()
         .all()
     )

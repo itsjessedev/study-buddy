@@ -8,18 +8,40 @@ import json
 
 from app.database import get_db
 from app.models import User, Skill, QuestionTemplate, UserMastery, QuestionHistory
-from app.schemas import QuestionResponse, AnswerSubmit, AnswerFeedback
+from app.schemas import (
+    QuestionResponse,
+    AnswerSubmit,
+    AnswerFeedback,
+    AnswerValidationRequest,
+    AnswerValidationResponse,
+)
 from app.auth import get_current_user
 from app.learning.adaptive import select_next_skill, get_adaptive_difficulty
 from app.learning.mastery import calculate_mastery
 from app.learning.spaced_repetition import calculate_next_review
 from app.generators import get_generator
 from app.utils.answer_validation import answers_are_equivalent
+from app.course_catalog import get_current_course_slugs
 
 router = APIRouter(prefix="/questions", tags=["Questions"])
 
 # In-memory cache for active questions (in production, use Redis)
 active_questions = {}
+
+
+@router.post("/validate", response_model=AnswerValidationResponse)
+def validate_answer(
+    answer_data: AnswerValidationRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """Check whether two answer formats are mathematically equivalent."""
+    expected_alternatives = answer_data.expected_answer.split("|")
+    return {
+        "is_correct": any(
+            answers_are_equivalent(answer_data.answer, expected_answer)
+            for expected_answer in expected_alternatives
+        )
+    }
 
 
 @router.get("/next", response_model=QuestionResponse)
@@ -41,7 +63,7 @@ def get_next_question(
 
     if skill_id is None:
         # No skills available - return first skill as fallback
-        first_skill = db.query(Skill).first()
+        first_skill = db.query(Skill).filter(Skill.slug.in_(get_current_course_slugs())).first()
         if not first_skill:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -50,7 +72,11 @@ def get_next_question(
         skill_id = first_skill.id
 
     # Get the skill
-    skill = db.query(Skill).filter(Skill.id == skill_id).first()
+    skill = (
+        db.query(Skill)
+        .filter(Skill.id == skill_id, Skill.slug.in_(get_current_course_slugs()))
+        .first()
+    )
     if not skill:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -207,7 +233,11 @@ def practice_specific_skill(
     db: Session = Depends(get_db),
 ):
     """Generate a question for a specific skill (for targeted practice)."""
-    skill = db.query(Skill).filter(Skill.id == skill_id).first()
+    skill = (
+        db.query(Skill)
+        .filter(Skill.id == skill_id, Skill.slug.in_(get_current_course_slugs()))
+        .first()
+    )
     if not skill:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

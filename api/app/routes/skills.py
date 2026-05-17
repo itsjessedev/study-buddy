@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models import Skill
 from app.schemas import SkillResponse, SkillListResponse, ExplainerResponse
 from app.auth import get_current_user
+from app.course_catalog import get_current_course_order, get_current_course_slugs
 
 router = APIRouter(prefix="/skills", tags=["Skills"])
 
@@ -23,12 +24,14 @@ def list_skills(
     Query params:
     - subject: Filter by subject (e.g., "Algebra I", "Pre-Algebra")
     """
-    query = db.query(Skill)
+    query = db.query(Skill).filter(Skill.slug.in_(get_current_course_slugs()))
 
     if subject:
         query = query.filter(Skill.subject == subject)
 
-    skills = query.all()
+    course_order = get_current_course_order()
+    order_index = {slug: index for index, slug in enumerate(course_order)}
+    skills = sorted(query.all(), key=lambda skill: order_index.get(skill.slug, len(order_index)))
 
     return {"skills": skills, "total": len(skills)}
 
@@ -36,7 +39,14 @@ def list_skills(
 @router.get("/subjects", response_model=Dict[str, List[SkillResponse]])
 def get_skills_by_subject(db: Session = Depends(get_db)):
     """Get all skills grouped by subject."""
-    skills = db.query(Skill).order_by(Skill.subject, Skill.name).all()
+    course_order = get_current_course_order()
+    order_index = {slug: index for index, slug in enumerate(course_order)}
+    skills = sorted(
+        db.query(Skill)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
+        .all(),
+        key=lambda skill: order_index.get(skill.slug, len(order_index)),
+    )
 
     grouped = {}
     for skill in skills:
@@ -65,7 +75,11 @@ def get_skill_explainer(
     db: Session = Depends(get_db),
 ):
     """Get detailed explanation and resources for a skill."""
-    skill = db.query(Skill).filter(Skill.id == skill_id).first()
+    skill = (
+        db.query(Skill)
+        .filter(Skill.id == skill_id, Skill.slug.in_(get_current_course_slugs()))
+        .first()
+    )
 
     if not skill:
         raise HTTPException(

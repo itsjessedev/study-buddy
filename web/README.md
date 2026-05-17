@@ -1,10 +1,13 @@
 # Study Buddy Web App
 
-React + TypeScript web application for Study Buddy adaptive learning platform.
+React + TypeScript web application for the Study Buddy Calc I readiness refresher.
 
 ## Features
 
-- **Adaptive Quiz Interface** - Smart question selection based on performance
+- **Learn Mode** - Guided math tutorials with checkpoint practice
+- **Lesson Quiz Handoff** - Start targeted quiz practice from the end of each lesson
+- **Quiz Only Mode** - Extra generated practice by course or mixed review
+- **Readiness Check** - Quick scan across the refresher topics
 - **Real-time Feedback** - Instant answer validation with step-by-step solutions
 - **Progress Tracking** - Detailed mastery scores and weak area analysis
 - **Math Rendering** - KaTeX for beautiful equation display
@@ -70,14 +73,14 @@ web/
 ## Available Routes
 
 - `/` - Redirects to `/quiz` (if logged in) or `/login`
-- `/login` - Login and registration
-- `/quiz` - Main quiz interface
+- `/login` - Google/Cloudflare Access sign-in entry point
+- `/quiz` - Learn, Quiz Only, and Check modes
 - `/progress` - Progress dashboard
 
 ## Components
 
 ### QuestionCard
-Displays question with answer input. Supports LaTeX rendering via KaTeX for math content.
+Displays question with answer input. Supports LaTeX rendering via KaTeX for math content and accepts equivalent answer formats through the API validator.
 
 ### FeedbackModal
 Shows answer feedback with:
