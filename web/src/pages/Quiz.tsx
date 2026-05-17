@@ -323,7 +323,7 @@ export default function Quiz() {
 
             <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
               {mode === 'learn' && 'Interactive lessons with practice checkpoints'}
-              {mode === 'practice' && 'Extra quiz practice for a specific course'}
+              {mode === 'practice' && 'Extra quiz practice for a refresher topic'}
               {mode === 'evaluation' && 'Quick readiness check across the refresher'}
             </p>
           </div>
@@ -346,7 +346,7 @@ export default function Quiz() {
 
           {mode === 'learn' ? (
             <p className="text-gray-400 text-sm text-center">
-              Choose a topic, watch each math move unfold, then try the lesson quiz.
+              Continue the next lesson in your Calc I readiness path, then prove it with a focused quiz.
             </p>
           ) : mode === 'evaluation' && evaluationStore.isActive && evaluationStore.progress ? (
             <EvaluationProgress

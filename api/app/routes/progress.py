@@ -9,6 +9,7 @@ from app.database import get_db
 from app.models import User, Skill, UserMastery, QuestionHistory, SkillPrerequisite
 from app.schemas import MasteryResponse, ProgressSummary, WeakArea
 from app.auth import get_current_user
+from app.course_catalog import get_current_course_slugs
 
 router = APIRouter(prefix="/progress", tags=["Progress"])
 
@@ -31,6 +32,7 @@ def get_weak_areas(
         .filter(
             UserMastery.user_id == current_user.id,
             UserMastery.mastery_score < 60,
+            Skill.slug.in_(get_current_course_slugs()),
         )
         .all()
     )
@@ -45,7 +47,10 @@ def get_weak_areas(
                 SkillPrerequisite,
                 Skill.id == SkillPrerequisite.skill_id,
             )
-            .filter(SkillPrerequisite.prerequisite_id == skill.id)
+            .filter(
+                SkillPrerequisite.prerequisite_id == skill.id,
+                Skill.slug.in_(get_current_course_slugs()),
+            )
             .all()
         )
 
@@ -83,6 +88,7 @@ def get_next_reviews(
         .filter(
             UserMastery.user_id == current_user.id,
             UserMastery.next_review <= datetime.utcnow(),
+            Skill.slug.in_(get_current_course_slugs()),
         )
         .all()
     )
@@ -122,23 +128,30 @@ def get_progress_summary(
     mastery_records = (
         db.query(UserMastery, Skill)
         .join(Skill, UserMastery.skill_id == Skill.id)
-        .filter(UserMastery.user_id == current_user.id)
+        .filter(
+            UserMastery.user_id == current_user.id,
+            Skill.slug.in_(get_current_course_slugs()),
+        )
         .all()
     )
 
     # Calculate stats
     total_questions = (
         db.query(func.count(QuestionHistory.id))
+        .join(Skill, QuestionHistory.skill_id == Skill.id)
         .filter(QuestionHistory.user_id == current_user.id)
+        .filter(Skill.slug.in_(get_current_course_slugs()))
         .scalar()
         or 0
     )
 
     correct_questions = (
         db.query(func.count(QuestionHistory.id))
+        .join(Skill, QuestionHistory.skill_id == Skill.id)
         .filter(
             QuestionHistory.user_id == current_user.id,
             QuestionHistory.is_correct == True,
+            Skill.slug.in_(get_current_course_slugs()),
         )
         .scalar()
         or 0
@@ -196,7 +209,11 @@ def get_skill_progress(
     db: Session = Depends(get_db),
 ):
     """Get progress for a specific skill."""
-    skill = db.query(Skill).filter(Skill.id == skill_id).first()
+    skill = (
+        db.query(Skill)
+        .filter(Skill.id == skill_id, Skill.slug.in_(get_current_course_slugs()))
+        .first()
+    )
     if not skill:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

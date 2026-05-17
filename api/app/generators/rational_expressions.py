@@ -29,6 +29,15 @@ RATIONAL_EXPRESSION_PROBLEMS = [
 ]
 
 
+def _format_over_x(numerator: int, denominator_coefficient: int) -> str:
+    """Return an unambiguous answer for numerator / (denominator_coefficient*x)."""
+    if numerator == 0:
+        return "0"
+    if denominator_coefficient == 1:
+        return f"{numerator}/x"
+    return f"{numerator}/({denominator_coefficient}x)"
+
+
 def generate_rational_expressions(difficulty: int = 1) -> Dict[str, Any]:
     """
     Generate rational expressions problems.
@@ -126,13 +135,15 @@ def generate_rational_expressions(difficulty: int = 1) -> Dict[str, Any]:
         if result_num != 0:
             g = gcd(abs(result_num), lcd_coef)
             if g > 1:
+                simplified_result_num = result_num // g
+                simplified_lcd_coef = lcd_coef // g
                 steps.append(f"Simplify by dividing both numerator and denominator by ${g}$:")
-                steps.append(f"$\\frac{{{result_num // g}}}{{{lcd_coef // g}x}}$")
-                answer = f"{result_num // g}/{lcd_coef // g}x"
+                steps.append(f"$\\frac{{{simplified_result_num}}}{{{simplified_lcd_coef}x}}$")
             else:
-                answer = f"{result_num}/{lcd_coef}x"
-            steps.append(f"**Final Answer:** ${answer.replace('/', '}{').replace('x', 'x}}').replace('{', '{', 1).replace('}', '', 1)}$".replace('}{', '}{'))
-            answer = f"{result_num // g}/{lcd_coef // g}x" if g > 1 else f"{result_num}/{lcd_coef}x"
+                simplified_result_num = result_num
+                simplified_lcd_coef = lcd_coef
+            steps.append(f"**Final Answer:** $\\frac{{{simplified_result_num}}}{{{simplified_lcd_coef}x}}$")
+            answer = _format_over_x(simplified_result_num, simplified_lcd_coef)
         else:
             steps.append(f"**Final Answer:** $0$")
             answer = "0"
@@ -195,9 +206,9 @@ def generate_rational_expressions(difficulty: int = 1) -> Dict[str, Any]:
             if g > 1:
                 steps.append(f"Simplify by dividing by ${g}$:")
                 steps.append(f"$\\frac{{{result_num // g}x^2}}{{{result_den // g}}}$")
-                answer = f"{result_num // g}x²/{result_den // g}"
+                answer = f"{result_num // g}x^2/{result_den // g}"
             else:
-                answer = f"{result_num}x²/{result_den}"
+                answer = f"{result_num}x^2/{result_den}"
 
             steps.append(f"**Final Answer:** $\\frac{{{result_num // g if g > 1 else result_num}x^2}}{{{result_den // g if g > 1 else result_den}}}$")
 

@@ -218,11 +218,22 @@ def seed_database():
             'solving-equations': ('course_solving_equations', [1, 2, 3]),
             'exponent-rules': ('exponent_rules', [1, 2, 3]),
             'factoring': ('course_factoring', [1, 2, 3]),
+            'quadratic-solving': ('quadratic_equation', [1, 2, 3]),
+            'rational-expressions': ('rational_expressions', [1, 2, 3]),
+            'inequalities-intervals': ('inequalities_intervals', [1, 2, 3]),
             'function-notation': ('function_notation', [1, 2, 3]),
+            'domain-range': ('domain_range', [1, 2, 3]),
             'graphs-and-slope': ('course_graphs_and_slope', [1, 2, 3]),
+            'composition-inverses': ('composition_inverses', [1, 2, 3]),
+            'piecewise-transformations': ('piecewise_transformations', [1, 2, 3]),
+            'polynomial-rational-graphs': ('polynomial_rational_graphs', [1, 2, 3]),
             'radicals': ('radical_expressions', [1, 2, 3]),
             'logs-exponentials': ('logs_exponentials', [1, 2, 3]),
             'basic-trig': ('sine_cosine_tangent', [1, 2, 3]),
+            'unit-circle-radians': ('unit_circle_radians', [1, 2, 3]),
+            'trig-identities': ('trig_identities', [1, 2, 3]),
+            'trig-graphs': ('trig_graphs_calc_ready', [1, 2, 3]),
+            'inverse-trig-basics': ('inverse_trig_functions', [1, 2, 3]),
         }
 
         # Create or update templates for each current skill. Update every matching

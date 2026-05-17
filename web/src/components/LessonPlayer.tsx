@@ -14,6 +14,11 @@ function normalizeAnswer(value: string) {
     .toLowerCase()
     .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '$1/$2')
     .replace(/\\sqrt\{([^{}]+)\}/g, 'sqrt($1)')
+    .replace(/\\pi|π/g, 'pi')
+    .replace(/\\leq|≤/g, '<=')
+    .replace(/\\geq|≥/g, '>=')
+    .replace(/\\ne|\\neq|≠|=\/=/g, '!=')
+    .replace(/∞|infinity/g, 'oo')
     .replace(/[{}]/g, '')
     .replace(/\s+/g, '')
     .replace(/−/g, '-')
@@ -66,8 +71,17 @@ function valuesEquivalent(userAnswer: string, expectedAnswer: string): boolean {
   }
 
   if (actual.includes(',') && expected.includes(',')) {
-    const actualParts = actual.split(',').filter(Boolean).sort();
-    const expectedParts = expected.split(',').filter(Boolean).sort();
+    const cleanList = (value: string) => {
+      const trimmed = (
+        (value.startsWith('(') && value.endsWith(')')) ||
+        (value.startsWith('[') && value.endsWith(']'))
+      )
+        ? value.slice(1, -1)
+        : value;
+      return trimmed.split(',').filter(Boolean).sort();
+    };
+    const actualParts = cleanList(actual);
+    const expectedParts = cleanList(expected);
     return (
       actualParts.length === expectedParts.length &&
       actualParts.every((part, index) => valuesEquivalent(part, expectedParts[index]))

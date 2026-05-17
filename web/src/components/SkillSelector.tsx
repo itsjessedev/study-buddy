@@ -130,7 +130,7 @@ export default function SkillSelector({ onSelectSkill, selectedSkillId }: SkillS
             >
               <div className="font-medium">Mixed Practice</div>
               <div className="text-xs text-gray-400 mt-1">
-                Let Study Buddy choose the next course based on your progress
+                Let Study Buddy choose the next readiness topic based on your progress
               </div>
             </button>
 
@@ -170,8 +170,8 @@ export default function SkillSelector({ onSelectSkill, selectedSkillId }: SkillS
 
       <div className="mt-2 text-xs text-gray-500 text-center">
         {selectedSkill
-          ? "You're practicing a specific course. Switch to Mixed Practice when you want a broader review."
-          : "Study Buddy will choose the next course based on your progress."
+          ? "You're practicing a specific refresher topic. Switch to Mixed Practice when you want a broader review."
+          : "Study Buddy will choose the next readiness topic based on your progress."
         }
       </div>
     </div>

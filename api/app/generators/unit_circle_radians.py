@@ -106,6 +106,7 @@ def generate_unit_circle_radians(difficulty: int = 1) -> Dict[str, Any]:
 
         steps.append("")
         steps.append(f"**Final Answer:** ${radian_str}$ radians")
+        answer = radian_str
 
     elif difficulty == 2:
         # Medium: Convert radians to degrees
@@ -149,6 +150,7 @@ def generate_unit_circle_radians(difficulty: int = 1) -> Dict[str, Any]:
 
         steps.append(f"**Final Answer:** ${degrees}°$")
         answer_numeric = degrees
+        answer = str(degrees)
 
     else:
         # Hard: Find coordinates on the unit circle
@@ -211,11 +213,12 @@ def generate_unit_circle_radians(difficulty: int = 1) -> Dict[str, Any]:
             f"**Final Answer:** $({cos_str}, {sin_str})$"
         ]
 
-        answer_numeric = round(cos_val, 4)  # Using cos_val as the numeric answer
+        answer_numeric = None
+        answer = f"{cos_str},{sin_str}"
 
     return {
         "question": question,
-        "answer": str(answer_numeric),
+        "answer": answer,
         "answer_numeric": answer_numeric,
         "steps": steps,
         "difficulty": difficulty,

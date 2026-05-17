@@ -56,6 +56,13 @@ from app.generators.course_factoring import generate_course_factoring
 from app.generators.course_graphs_and_slope import generate_course_graphs_and_slope
 from app.generators.function_notation import generate_function_notation
 from app.generators.logs_exponentials import generate_logs_exponentials
+from app.generators.inequalities_intervals import generate_inequalities_intervals
+from app.generators.domain_range import generate_domain_range
+from app.generators.composition_inverses import generate_composition_inverses
+from app.generators.piecewise_transformations import generate_piecewise_transformations
+from app.generators.trig_identities import generate_trig_identities
+from app.generators.polynomial_rational_graphs import generate_polynomial_rational_graphs
+from app.generators.trig_graphs_calc_ready import generate_trig_graphs_calc_ready
 
 # Registry of generator functions by template type
 GENERATORS: Dict[str, Callable[[int], Dict[str, Any]]] = {
@@ -114,6 +121,13 @@ GENERATORS: Dict[str, Callable[[int], Dict[str, Any]]] = {
     "course_graphs_and_slope": generate_course_graphs_and_slope,
     "function_notation": generate_function_notation,
     "logs_exponentials": generate_logs_exponentials,
+    "inequalities_intervals": generate_inequalities_intervals,
+    "domain_range": generate_domain_range,
+    "composition_inverses": generate_composition_inverses,
+    "piecewise_transformations": generate_piecewise_transformations,
+    "trig_identities": generate_trig_identities,
+    "polynomial_rational_graphs": generate_polynomial_rational_graphs,
+    "trig_graphs_calc_ready": generate_trig_graphs_calc_ready,
 }
 
 

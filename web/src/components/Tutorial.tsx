@@ -41,7 +41,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   {
     target: '[data-tutorial="practice-mode"]',
     title: 'Quiz Only',
-    content: 'Practice a specific course with generated questions when you want extra repetition.',
+    content: 'Practice a specific refresher topic with generated questions when you want extra repetition.',
     position: 'bottom',
     align: 'start',
   },

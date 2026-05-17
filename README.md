@@ -7,8 +7,8 @@ intentionally out of scope.
 ## Features
 
 - **Interactive Lessons**: Guided, code-rendered math tutorials with checkpoints
-- **Lesson Quizzes**: Each lesson hands off into a targeted quiz for that course
-- **Quiz Only Mode**: Extra generated practice for specific courses or mixed review
+- **Lesson Quizzes**: Each lesson hands off into a targeted quiz for that topic
+- **Quiz Only Mode**: Extra generated practice for specific refresher topics or mixed review
 - **Flexible Answer Validation**: Equivalent fractions, decimals, radicals, powers, algebraic forms, and reordered lists are accepted unless a question requires a specific format
 - **Adaptive Learning**: Spaced repetition + difficulty scaling based on performance
 - **Smart Gap Detection**: Identifies prerequisite weaknesses when struggling with advanced topics
@@ -18,10 +18,14 @@ intentionally out of scope.
 
 ## Course Scope
 
-The active course catalog is limited to:
+The active readiness path is:
 
-Fractions, Solving Equations, Exponent Rules, Factoring, Function Notation,
-Graphs and Slope, Radicals, Logs and Exponentials, and Basic Trig.
+Fractions, Solving Equations, Exponent Rules, Factoring, Quadratic Solving,
+Rational Expressions, Inequalities and Intervals, Function Notation, Domain and
+Range, Graphs and Slope, Composition and Inverses, Piecewise and
+Transformations, Polynomial and Rational Graphs, Radicals, Logs and
+Exponentials, Basic Trig, Unit Circle and Radians, Trig Identities, Trig Graphs,
+and Inverse Trig Basics.
 
 ## Architecture
 

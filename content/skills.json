@@ -38,6 +38,33 @@
       "difficulty_base": 2
     },
     {
+      "slug": "quadratic-solving",
+      "name": "Quadratic Solving",
+      "subject": "Algebra",
+      "description": "Solve quadratic equations by factoring and the quadratic formula",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratics-solving-factoring",
+      "prerequisites": ["factoring"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "rational-expressions",
+      "name": "Rational Expressions",
+      "subject": "Algebra",
+      "description": "Simplify, multiply, divide, and combine algebraic fractions",
+      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:rational",
+      "prerequisites": ["factoring", "fractions"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "inequalities-intervals",
+      "name": "Inequalities and Intervals",
+      "subject": "Algebra",
+      "description": "Solve inequalities and read interval notation for calculus domains",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:solve-equations-inequalities",
+      "prerequisites": ["solving-equations"],
+      "difficulty_base": 2
+    },
+    {
       "slug": "function-notation",
       "name": "Function Notation",
       "subject": "Functions",
@@ -47,6 +74,15 @@
       "difficulty_base": 2
     },
     {
+      "slug": "domain-range",
+      "name": "Domain and Range",
+      "subject": "Functions",
+      "description": "Find valid inputs and outputs from formulas and graphs",
+      "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:functions",
+      "prerequisites": ["function-notation", "inequalities-intervals"],
+      "difficulty_base": 3
+    },
+    {
       "slug": "graphs-and-slope",
       "name": "Graphs and Slope",
       "subject": "Functions",
@@ -54,6 +90,33 @@
       "khan_url": "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:linear-equations-graphs",
       "prerequisites": ["function-notation"],
       "difficulty_base": 2
+    },
+    {
+      "slug": "composition-inverses",
+      "name": "Composition and Inverses",
+      "subject": "Functions",
+      "description": "Compose functions, undo functions, and interpret inverse notation",
+      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:func-composition",
+      "prerequisites": ["function-notation", "solving-equations"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "piecewise-transformations",
+      "name": "Piecewise and Transformations",
+      "subject": "Functions",
+      "description": "Evaluate piecewise functions and recognize shifts, stretches, and reflections",
+      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:transformations",
+      "prerequisites": ["graphs-and-slope", "domain-range"],
+      "difficulty_base": 3
+    },
+    {
+      "slug": "polynomial-rational-graphs",
+      "name": "Polynomial and Rational Graphs",
+      "subject": "Functions",
+      "description": "Read zeros, end behavior, and rational asymptotes from function structure",
+      "khan_url": "https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:rational",
+      "prerequisites": ["quadratic-solving", "rational-expressions", "graphs-and-slope"],
+      "difficulty_base": 4
     },
     {
       "slug": "radicals",
@@ -81,6 +144,42 @@
       "khan_url": "https://www.khanacademy.org/math/trigonometry/trigonometry-right-triangles",
       "prerequisites": ["graphs-and-slope", "radicals"],
       "difficulty_base": 3
+    },
+    {
+      "slug": "unit-circle-radians",
+      "name": "Unit Circle and Radians",
+      "subject": "Trigonometry",
+      "description": "Convert degrees and radians and read exact unit-circle values",
+      "khan_url": "https://www.khanacademy.org/math/trigonometry/unit-circle-trig-func",
+      "prerequisites": ["basic-trig"],
+      "difficulty_base": 4
+    },
+    {
+      "slug": "trig-identities",
+      "name": "Trig Identities",
+      "subject": "Trigonometry",
+      "description": "Use core identities to simplify expressions and find missing trig values",
+      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-equations-and-identities",
+      "prerequisites": ["unit-circle-radians"],
+      "difficulty_base": 4
+    },
+    {
+      "slug": "trig-graphs",
+      "name": "Trig Graphs",
+      "subject": "Trigonometry",
+      "description": "Identify amplitude, period, midline, and basic transformations of sine and cosine",
+      "khan_url": "https://www.khanacademy.org/math/trigonometry/trig-function-graphs",
+      "prerequisites": ["unit-circle-radians"],
+      "difficulty_base": 4
+    },
+    {
+      "slug": "inverse-trig-basics",
+      "name": "Inverse Trig Basics",
+      "subject": "Trigonometry",
+      "description": "Evaluate inverse sine, cosine, and tangent at standard values",
+      "khan_url": "https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:trig/x9e81a4f98389efdf:inverse-trig-functions",
+      "prerequisites": ["unit-circle-radians", "trig-identities"],
+      "difficulty_base": 4
     }
   ],
   "subjects": {
@@ -93,7 +192,7 @@
       "order": 2
     },
     "Functions": {
-      "description": "Function notation, graphs, and linear behavior",
+      "description": "Function notation, graphs, transformations, and graph behavior",
       "order": 3
     },
     "Precalculus": {
@@ -101,7 +200,7 @@
       "order": 4
     },
     "Trigonometry": {
-      "description": "Right triangle and unit-circle trig basics",
+      "description": "Right triangle, unit-circle, identity, graph, and inverse trig basics",
       "order": 5
     }
   }

@@ -25,6 +25,11 @@ def normalize_answer_text(answer: str) -> str:
     normalized = normalized.replace("\\left", "").replace("\\right", "")
     normalized = normalized.replace("\\cdot", "*").replace("·", "*").replace("×", "*")
     normalized = normalized.replace("−", "-").replace("–", "-")
+    normalized = normalized.replace("\\pi", "pi").replace("π", "pi")
+    normalized = normalized.replace("\\leq", "<=").replace("\\geq", ">=")
+    normalized = normalized.replace("≤", "<=").replace("≥", ">=").replace("≠", "!=")
+    normalized = normalized.replace("=/=", "!=").replace("\\ne", "!=").replace("\\neq", "!=")
+    normalized = normalized.replace("∞", "oo").replace("infinity", "oo")
     normalized = normalized.replace("\\sqrt", "sqrt")
     normalized = re.sub(r"√\s*([0-9a-zA-Z]+)", r"sqrt(\1)", normalized)
     normalized = normalized.replace("√", "sqrt")
@@ -104,6 +109,11 @@ def _parse_list(answer: str) -> list[str] | None:
     normalized = normalize_answer_text(answer)
     if "," not in normalized:
         return None
+    if (
+        (normalized.startswith("(") and normalized.endswith(")"))
+        or (normalized.startswith("[") and normalized.endswith("]"))
+    ):
+        normalized = normalized[1:-1]
     parts = [part for part in normalized.split(",") if part]
     return parts or None
 
@@ -117,6 +127,75 @@ def _to_sympy(answer: str) -> Any | None:
         return parse_expr(normalized, transformations=TRANSFORMATIONS)
     except Exception:
         return None
+
+
+def _inequalities_equivalent(user_answer: str, correct_answer: str, tolerance: float) -> bool:
+    left = normalize_answer_text(user_answer)
+    right = normalize_answer_text(correct_answer)
+    if left == right:
+        return True
+
+    inequality_pattern = re.compile(r"^([a-zA-Z])([<>]=?|!=)(-?\d+(?:\.\d+)?)$")
+    reversed_inequality_pattern = re.compile(r"^(-?\d+(?:\.\d+)?)([<>]=?)([a-zA-Z])$")
+    all_real_except_pattern = re.compile(
+        r"^(?:allreal(?:numbers?)?except|real(?:numbers?)?except)(?:[a-zA-Z]=?)?(-?\d+(?:\.\d+)?)$"
+    )
+    value_pattern = r"(?:-?\d+(?:\.\d+)?|[+-]?oo)"
+    interval_pattern = re.compile(rf"^([\[(])({value_pattern}),({value_pattern})([\])])$")
+
+    def canonical_inequality(answer: str) -> tuple[str, str, str] | None:
+        direct_match = inequality_pattern.fullmatch(answer)
+        if direct_match:
+            return direct_match.groups()
+
+        all_real_except_match = all_real_except_pattern.fullmatch(answer)
+        if all_real_except_match:
+            return "x", "!=", all_real_except_match.group(1)
+
+        reversed_match = reversed_inequality_pattern.fullmatch(answer)
+        if not reversed_match:
+            interval_match = interval_pattern.fullmatch(answer)
+            if not interval_match:
+                return None
+
+            left_bracket, lower, upper, right_bracket = interval_match.groups()
+            if upper in {"oo", "+oo"} and lower not in {"-oo", "oo", "+oo"}:
+                return "x", ">=" if left_bracket == "[" else ">", lower
+            if lower == "-oo" and upper not in {"-oo", "oo", "+oo"}:
+                return "x", "<=" if right_bracket == "]" else "<", upper
+            return None
+
+        value, op, variable = reversed_match.groups()
+        flipped_op = {"<": ">", "<=": ">=", ">": "<", ">=": "<="}[op]
+        return variable, flipped_op, value
+
+    left_match = canonical_inequality(left)
+    right_match = canonical_inequality(right)
+    if left_match and right_match:
+        left_var, left_op, left_value = left_match
+        right_var, right_op, right_value = right_match
+        return (
+            left_var == right_var
+            and left_op == right_op
+            and abs(float(left_value) - float(right_value)) < tolerance
+        )
+
+    left_interval = interval_pattern.fullmatch(left)
+    right_interval = interval_pattern.fullmatch(right)
+    if left_interval and right_interval:
+        def values_match(a: str, b: str) -> bool:
+            if a in {"oo", "+oo", "-oo"} or b in {"oo", "+oo", "-oo"}:
+                return a == b or {a, b} == {"oo", "+oo"}
+            return abs(float(a) - float(b)) < tolerance
+
+        return (
+            left_interval.group(1) == right_interval.group(1)
+            and left_interval.group(4) == right_interval.group(4)
+            and values_match(left_interval.group(2), right_interval.group(2))
+            and values_match(left_interval.group(3), right_interval.group(3))
+        )
+
+    return False
 
 
 def _sympy_equivalent(left: str, right: str, tolerance: float) -> bool:
@@ -179,6 +258,9 @@ def answers_are_equivalent(user_answer: str, correct_answer: str, tolerance: flo
     problem requires a specific symbolic form.
     """
     if normalize_answer_text(user_answer) == normalize_answer_text(correct_answer):
+        return True
+
+    if _inequalities_equivalent(user_answer, correct_answer, tolerance):
         return True
 
     user_assignment = _parse_single_assignment(user_answer)
